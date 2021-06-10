@@ -8,13 +8,13 @@ using WebAPI.Models;
 namespace WebAPI.Controllers
 {
 
-    [ApiController]
     [Route("api/[controller]")]
-    public class DValidCompanies : ControllerBase
+    [ApiController]
+    public class DValidCompaniesController : ControllerBase
     {
  
         private readonly CompaniesDBContext _context;
-        public DValidCompanies(CompaniesDBContext context)
+        public DValidCompaniesController(CompaniesDBContext context)
         {
             _context = context;
         }
@@ -22,11 +22,11 @@ namespace WebAPI.Controllers
 
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<DValidCompany>> GetCompany(int id)
+        public async Task<ActionResult> GetCompany([FromRoute] int id)
         {
-            var dValidCompany = await _context.DValidCompany.FindAsync(id);
+            var dValidCompany = await _context.DValidCompany.FindAsync(id.ToString());
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }

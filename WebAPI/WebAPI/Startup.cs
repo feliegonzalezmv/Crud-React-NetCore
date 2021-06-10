@@ -26,6 +26,7 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<SeedDB>();
+            services.AddControllers();
             services.AddRazorPages();
             services.AddDbContext<CompaniesDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
         }
@@ -48,10 +49,12 @@ namespace WebAPI
 
             app.UseAuthorization();
 
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
+
         }
     }
 }
