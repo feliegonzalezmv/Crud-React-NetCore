@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Data;
 using WebAPI.Models;
 
 namespace WebAPI
@@ -24,6 +25,7 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<SeedDB>();
             services.AddRazorPages();
             services.AddDbContext<CompaniesDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
         }
