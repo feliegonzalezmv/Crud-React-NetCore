@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,31 @@ namespace WebAPI.Controllers
 
             return Ok(dCompany);
         }
+
+
+        [HttpPost(Name = "UpdateCompany")]
+        public async Task<IActionResult> UpdateCompany([FromBody] DCompany dCompany)
+        {
+
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if(dCompany == null)
+            {
+                return BadRequest(new Response { Status = false, Message = "No fue posible realizar la actualización" });
+            }
+
+            _context.Entry(dCompany).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+
+            return Ok(new Response { Status = true, Message = "Se actualizo la información correctamente" });
+
+        }
+
 
     }
 }
