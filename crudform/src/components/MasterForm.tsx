@@ -1,16 +1,28 @@
-import React, { useState, useContext } from 'react';
-import { Container, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Container, Typography, Box } from '@material-ui/core';
 import EditForm from './EditForm';
-import { ValidateDocument } from './ValidateDocument';
-import Context from './context/appContext';
+import { ValidateCompany } from './ValidateCompany';
 
 export const MasterForm = () => {
-  const { isValid }: any = useContext(Context);
+  const [data, setData] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <Container maxWidth={'sm'}>
-      <Typography variant={'h4'}>CRUD Company</Typography>
-      {isValid ? <EditForm /> : <ValidateDocument />}
+      <Box marginBottom={5}>
+        <Typography variant={'h4'}>CRUD Empresas</Typography>
+      </Box>
+
+      {data ? (
+        <EditForm
+          data={data}
+          setData={setData}
+          isSubmitting={isSubmitting}
+          setIsSubmitting={setIsSubmitting}
+        />
+      ) : (
+        <ValidateCompany setData={setData} />
+      )}
     </Container>
   );
 };

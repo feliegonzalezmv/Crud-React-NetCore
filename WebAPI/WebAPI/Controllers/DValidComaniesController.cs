@@ -24,23 +24,28 @@ namespace WebAPI.Controllers
 
         public async Task<ActionResult> GetValidCompany([FromRoute] int id)
         {
-            var dValidCompany = await _context.DValidCompany.FindAsync(id.ToString());
 
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest();
-            }
+                var dValidCompany = await _context.DValidCompany.FindAsync(id.ToString());
 
-            if (dValidCompany == null)
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new Response { Status = false, Message = "Compañia no valida" });
+                }
+
+                if (dValidCompany == null)
+                {
+                    return NotFound(new Response { Status = false, Message = "La identificación de la empresa no se encuentra registrada" });
+                }
+
+                return Ok(dValidCompany);
+            }
+            catch (Exception)
             {
-                return NotFound("La identificación de la empresa no está registrada");
+                return BadRequest(new Response { Status = false, Message = "Compañia no valida" });
+               
             }
-
-            return Ok(dValidCompany);
         }
-
-
-
-
     }
 }

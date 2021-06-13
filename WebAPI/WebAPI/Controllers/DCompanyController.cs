@@ -25,19 +25,30 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetValidCompany([FromRoute] int id)
         {
-            var dCompany = await _context.DCompany.FindAsync(id.ToString());
 
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest();
-            } 
+                var dCompany = await _context.DCompany.FindAsync(id.ToString());
 
-            if (dCompany == null)
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new Response { Status = false, Message = "Ups, ocurrio un error" });
+                }
+
+                if (dCompany == null)
+                {
+                    return NotFound(new Response { Status = false, Message = "La identificación de la empresa no se encuentra registrada" });
+                }
+
+                return Ok(dCompany);
+            }
+            catch (Exception)
             {
-                return NotFound("La identificación de la empresa no está registrada");
+
+                return NotFound(new Response { Status = false, Message = "Ups, ocurrio un error" });
             }
 
-            return Ok(dCompany);
+           
         }
 
 
@@ -45,22 +56,31 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> UpdateCompany([FromBody] DCompany dCompany)
         {
 
-
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new Response { Status = false, Message = "Ups, ocurrio un error" });
+                }
+
+                if (dCompany == null)
+                {
+                    return NotFound(new Response { Status = false, Message = "No fue posible realizar la actualización" });
+                }
+
+                _context.Entry(dCompany).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+
+                return Ok(new Response { Status = true, Message = "Se actualizo la información correctamente" });
+            }
+            catch (Exception)
+            {
+
+                return BadRequest(new Response { Status = false, Message = "Ups, ocurrió un error inesperado"   });
             }
 
-            if(dCompany == null)
-            {
-                return BadRequest(new Response { Status = false, Message = "No fue posible realizar la actualización" });
-            }
-
-            _context.Entry(dCompany).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
-
-            return Ok(new Response { Status = true, Message = "Se actualizo la información correctamente" });
+          
 
         }
 
