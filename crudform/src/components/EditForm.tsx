@@ -61,6 +61,7 @@ export default function EditForm({
       }
 
       setLoading(false);
+      setIsSubmitting(false);
     };
 
     if (Object.keys(errors).length === 0 && isSubmitting) {
