@@ -19,7 +19,6 @@ export const getData = async (url = '') => {
   try {
     const response = await fetch(url, {
       method: 'GET',
-      mode: 'no-cors',
     });
     return response.json();
   } catch (error) {
